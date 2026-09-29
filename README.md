@@ -50,3 +50,10 @@ version is newer than the previous release.
 While anything fails, one issue labelled `release-check` stays open with the
 list of problems; the next passing run closes it. If the updater key ever
 changes, set the repository variable `UPDATER_PUBKEY` to the new public key.
+
+## Agents
+
+`paperclip/nexus-grind-ops` is a Paperclip company package: a Watcher that
+runs this check and reads CI in the private repository every week, a
+Dispatcher that keeps a status board, and a Fixer that opens pull requests.
+Its README has the setup.
