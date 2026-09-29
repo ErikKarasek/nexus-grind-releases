@@ -34,7 +34,7 @@ rem 2. Claude Code, which the agents run on
 where claude >nul 2>nul
 if errorlevel 1 (
   echo Instaluji Claude Code...
-  call npm install -g @anthropic-ai/claude-code
+  winget install -e --id Anthropic.ClaudeCode --accept-package-agreements --accept-source-agreements
   echo.
   echo Ted se jednou prihlas: otevri novy terminal, napis  claude  a projdi prihlaseni.
   echo Potom spust start-windows.bat znovu.
