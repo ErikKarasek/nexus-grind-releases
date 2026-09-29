@@ -15,6 +15,12 @@ Supabase, repository settings). Every agent loads it.
 
 ## Setup
 
+The quickest way is the start script next to this folder:
+`paperclip/start-windows.bat` (double-click) or `paperclip/start-mac.command`
+(run with `bash start-mac.command`). It installs Node.js and Claude Code when
+they are missing, starts Paperclip, imports this package once and opens the
+board. The manual steps below do the same.
+
 1. Install and start Paperclip on the machine that will run the agents. It
    needs Node.js 24.11 or newer and a logged-in Claude Code CLI (`claude`).
 
