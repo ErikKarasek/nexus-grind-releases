@@ -1,7 +1,9 @@
 #!/bin/bash
 # Starts Paperclip on this Mac, imports the Nexus Grind Ops agents the first
 # time, and opens the board in the browser. Safe to run again: it skips
-# whatever is already done. Run it from Terminal with:
+# whatever is already done. Paste this into Terminal (no download needed):
+#   bash <(curl -fsSL https://raw.githubusercontent.com/ErikKarasek/nexus-grind-releases/main/paperclip/start-mac.command)
+# or, with the file downloaded:
 #   bash ~/Downloads/start-mac.command
 
 PKG="ErikKarasek/nexus-grind-releases/paperclip/nexus-grind-ops"
@@ -30,10 +32,10 @@ fi
 
 # 2. Claude Code, which the agents run on
 if ! command -v claude >/dev/null 2>&1; then
-  echo "Instaluji Claude Code..."
-  npm install -g @anthropic-ai/claude-code || exit 1
+  echo "Instaluji Claude Code oficiálním instalátorem..."
+  curl -fsSL https://claude.ai/install.sh | bash || exit 1
   echo
-  echo "Teď se jednou přihlas: napiš  claude  a projdi přihlášení. Pak spusť skript znovu."
+  echo "Teď otevři nové okno Terminálu, napiš  claude  a projdi přihlášení. Pak spusť skript znovu."
   exit 0
 fi
 
