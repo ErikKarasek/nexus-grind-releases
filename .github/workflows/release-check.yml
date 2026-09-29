@@ -1,0 +1,90 @@
+name: Release check
+
+# Walks the update path the installed app takes (latest.json, the file for
+# each platform, its signature) and keeps one open issue labelled
+# `release-check` while anything on it is broken. The issue closes itself on
+# the next passing run.
+
+on:
+  release:
+    types: [published, edited]
+  schedule:
+    # Mondays. Catches a repository turned private or an asset deleted later.
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to check (empty = latest)"
+        required: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: release-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install cryptography
+
+      - name: Check release
+        id: check
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          UPDATER_PUBKEY: ${{ vars.UPDATER_PUBKEY }}
+          EXPECTED_PLATFORMS: ${{ vars.EXPECTED_PLATFORMS }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          set +e
+          python .github/scripts/check_release.py ${TAG:+--tag "$TAG"} \
+            --report report.md --result result.json
+          code=$?
+          set -e
+          # 0 = passed, 1 = a check failed. Anything else is the script or
+          # GitHub falling over, which is not a broken release: fail the run
+          # without touching the issue.
+          if [ "$code" -gt 1 ] || [ ! -f result.json ]; then exit "$code"; fi
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+          echo "ok=$(jq -r .ok result.json)" >> "$GITHUB_OUTPUT"
+          echo "tag=$(jq -r .tag result.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the issue
+        if: steps.check.outputs.ok == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.check.outputs.tag }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create release-check --color d73a4a \
+            --description "Found by the release check workflow" --force
+          { cat report.md; echo; echo "Run: $RUN_URL"; } > body.md
+          number=$(gh issue list --label release-check --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --title "Release check: $TAG cannot update installed copies" --body-file body.md
+          else
+            gh issue create --label release-check \
+              --title "Release check: $TAG cannot update installed copies" --body-file body.md
+          fi
+          exit 1
+
+      - name: Close the issue
+        if: steps.check.outputs.ok == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.check.outputs.tag }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          for number in $(gh issue list --label release-check --state open --json number --jq '.[].number'); do
+            gh issue close "$number" --reason completed \
+              --comment "Release check passes for $TAG. $RUN_URL"
+          done
