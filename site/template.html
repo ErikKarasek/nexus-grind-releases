@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nexus Grind ke stažení</title>
+<meta name="description" content="Nexus Grind {{VERSION}} pro Windows a macOS.">
+<link rel="icon" href="icon.png">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #05060a;
+  --panel: rgba(17, 21, 34, 0.74);
+  --line: rgba(255, 255, 255, 0.09);
+  --text: #f7f8fc;
+  --muted: #98a2b9;
+  --quiet: #687189;
+  --accent: #22d3ee;
+  --accent-2: #8b5cf6;
+  --amber: #facc15;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent-2) 8%, transparent), transparent 32%),
+    linear-gradient(315deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%),
+    var(--bg);
+  color: var(--text);
+  font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+main { max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; }
+a { color: var(--accent); }
+header { display: flex; gap: 16px; align-items: center; margin-bottom: 32px; }
+header img { width: 64px; height: 64px; border-radius: 14px; }
+h1 { font-size: 28px; line-height: 1.2; margin: 0; }
+.sub { color: var(--muted); margin: 4px 0 0; }
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+h2 { font-size: 18px; margin: 0 0 12px; }
+.primary { display: none; }
+.primary.show { display: block; margin-bottom: 28px; }
+.primary p:first-child { margin-top: 0; }
+.btn {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #05060a;
+  font-weight: 700;
+  text-decoration: none;
+}
+.btn:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.hint { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+.files { list-style: none; padding: 0; margin: 0; }
+.files li { padding: 12px 0; border-top: 1px solid var(--line); }
+.files li:first-child { border-top: 0; padding-top: 0; }
+.files a { font-weight: 600; }
+.files .meta { display: block; color: var(--quiet); font-size: 13px; overflow-wrap: anywhere; }
+.warn h3 { font-size: 15px; margin: 16px 0 4px; }
+.warn h3:first-of-type { margin-top: 0; }
+.warn p { margin: 0; color: var(--muted); }
+.notes { color: var(--muted); }
+.notes strong, .notes code { color: var(--text); }
+.notes code { font-size: 0.9em; overflow-wrap: anywhere; }
+.notes ul { padding-left: 20px; }
+.notes li { margin-bottom: 8px; }
+footer { color: var(--quiet); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon.png" alt="">
+    <div>
+      <h1>Nexus Grind</h1>
+      <p class="sub">Verze {{VERSION}}, vydaná {{DATE}}</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="primary" data-os="windows">
+      <a class="btn" href="{{WIN_URL}}">Stáhnout pro Windows</a>
+      <p class="hint">{{WIN_META}}</p>
+    </div>
+    <div class="primary" data-os="mac">
+      <a class="btn" href="{{MAC_URL}}">Stáhnout pro macOS</a>
+      <p class="hint">{{MAC_META}}. Jen pro Macy s čipem Apple (M1 a novější).</p>
+    </div>
+    <div class="primary" data-os="mobile">
+      <p>Tady jsou verze pro Windows a macOS. Otevři tuhle stránku na počítači.</p>
+    </div>
+
+    <h2 id="all">Všechny soubory</h2>
+    <ul class="files">
+      <li><a href="{{WIN_URL}}">Windows, instalátor</a><span class="meta">{{WIN_META}}</span></li>
+      <li><a href="{{MSI_URL}}">Windows, MSI pro správu firemních počítačů</a><span class="meta">{{MSI_META}}</span></li>
+      <li><a href="{{MAC_URL}}">macOS, Apple silicon</a><span class="meta">{{MAC_META}}</span></li>
+    </ul>
+  </section>
+
+  <section class="panel warn">
+    <h2>Varování při instalaci</h2>
+    <h3>Windows</h3>
+    <p>SmartScreen napíše, že aplikace není rozpoznaná. Klikni na "Další informace" a pak "Přesto spustit". Instalátor zatím nemá podpis vydavatele, jen proto se to objevuje.</p>
+    <h3>macOS</h3>
+    <p>Po rozbalení na aplikaci klikni pravým tlačítkem, zvol "Otevřít" a potvrď. Dvojklik při prvním spuštění nabídne jen přesun do koše, protože aplikace zatím není podepsaná certifikátem Developer ID.</p>
+    <h3>Aktualizace</h3>
+    <p>Nainstalovaná aplikace se aktualizuje sama a přijme jen balíček podepsaný klíčem projektu.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Co je nového ve verzi {{VERSION}}</h2>
+    <div class="notes">{{NOTES}}</div>
+  </section>
+
+  <footer>
+    <a href="{{RELEASE_URL}}">Release {{VERSION}} na GitHubu</a> &middot;
+    <a href="{{ALL_URL}}">starší verze</a>
+  </footer>
+</main>
+<script>
+(function () {
+  var ua = navigator.userAgent || "";
+  var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  var os = null;
+  if (/android|iphone|ipad|ipod/i.test(ua) || (/mac/i.test(platform) && navigator.maxTouchPoints > 1)) os = "mobile";
+  else if (/win/i.test(platform) || /windows/i.test(ua)) os = "windows";
+  else if (/mac/i.test(platform)) os = "mac";
+  if (!os) return;
+  var el = document.querySelector('.primary[data-os="' + os + '"]');
+  if (el) el.classList.add("show");
+})();
+</script>
+</body>
+</html>
