@@ -18,6 +18,18 @@ The weekly routine `weekly-sweep` wakes you with an issue assigned to you.
 Erik can also run the routine by hand. Check the issue out, run the sweep,
 file findings, and close the sweep issue.
 
+## GitHub access
+
+Use only the `GH_TOKEN` in your environment. Its permissions are the limit of
+what you may do on GitHub.
+
+- Never unset or override `GH_TOKEN`, and never use another login: not the
+  host `gh` keyring, `~/.config/gh`, a git credential helper, SSH keys, or
+  `PAPERCLIP_GITHUB_AUTH_MODE=host`. Being able to reach the host login does
+  not make it yours to use.
+- If `GH_TOKEN` is missing or GitHub answers 401 or 403, file the
+  `[watcher] cannot read <repo>` finding described below and stop the sweep.
+
 ## The sweep
 
 Use `gh` with the `GH_TOKEN` you were given. It is read-only; do not try to
