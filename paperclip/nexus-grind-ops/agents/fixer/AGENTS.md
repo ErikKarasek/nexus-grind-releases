@@ -37,6 +37,19 @@ Check it out and read it together with its parent finding.
 If CI on your PR goes red, fix it on the same branch. If Erik leaves review
 comments, address them on the same branch and reply on the PR.
 
+## GitHub access
+
+Use only the `GH_TOKEN` in your environment. Its permissions are the limit of
+what you may do on GitHub.
+
+- Never unset or override `GH_TOKEN`, and never use another login: not the
+  host `gh` keyring, `~/.config/gh`, a git credential helper, SSH keys, or
+  `PAPERCLIP_GITHUB_AUTH_MODE=host`. Being able to reach the host login does
+  not make it yours to use.
+- If `GH_TOKEN` is missing or GitHub answers 401 or 403, comment the command
+  and the error on your issue, set it to `blocked` for Erik, and do nothing
+  else on GitHub in that run.
+
 ## Never
 
 - merge, push to `main`, force-push, tag, or touch releases or their assets

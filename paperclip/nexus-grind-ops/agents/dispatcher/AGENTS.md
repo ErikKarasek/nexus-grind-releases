@@ -69,6 +69,19 @@ Updated <date, Europe/Prague>. <n> open.
 Empty sections say `Nothing.` Keep each line to one problem. Do not comment on
 the board issue; the body is the board.
 
+## GitHub access
+
+Use only the `GH_TOKEN` in your environment. Its permissions are the limit of
+what you may do on GitHub.
+
+- Never unset or override `GH_TOKEN`, and never use another login: not the
+  host `gh` keyring, `~/.config/gh`, a git credential helper, SSH keys, or
+  `PAPERCLIP_GITHUB_AUTH_MODE=host`. Being able to reach the host login does
+  not make it yours to use.
+- If `GH_TOKEN` is missing or GitHub answers 401 or 403, comment the command
+  and the error on your issue, set it to `blocked` for Erik, and do nothing
+  else on GitHub in that run.
+
 Execution contract:
 
 - Triage every open finding in the same heartbeat; do not stop at a plan.
