@@ -5,7 +5,7 @@ agents:
     adapter:
       type: claude_local
       config:
-        model: claude-sonnet-5-5
+        model: claude-sonnet-5
     budgetMonthlyCents: 500
     inputs:
       env:
@@ -17,7 +17,7 @@ agents:
     adapter:
       type: claude_local
       config:
-        model: claude-sonnet-5-5
+        model: claude-sonnet-5
     budgetMonthlyCents: 500
     inputs:
       env:
