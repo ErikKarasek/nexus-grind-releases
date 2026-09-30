@@ -37,3 +37,31 @@ refuses any update not signed by the project's key, whatever this page says.
 ## Releases
 
 Published by the build in the private repository. Nothing here is edited by hand.
+
+## Release check
+
+`.github/workflows/release-check.yml` runs when a release is published or
+edited, every Monday, and on demand. It downloads `latest.json` from the URL the
+app polls, fetches the file listed for each platform without credentials, and
+verifies its signature against the updater key compiled into the shipped app.
+It also checks that the installers named above are attached and that the
+version is newer than the previous release.
+
+While anything fails, one issue labelled `release-check` stays open with the
+list of problems; the next passing run closes it. If the updater key ever
+changes, set the repository variable `UPDATER_PUBKEY` to the new public key.
+
+## Agents
+
+`paperclip/nexus-grind-ops` is a Paperclip company package: a Watcher that
+runs this check and reads CI in the private repository every week, a
+Dispatcher that keeps a status board, and a Fixer that opens pull requests.
+Its README has the setup.
+
+## Download page
+
+`site/` builds a one-page download site from the latest release, and
+`.github/workflows/pages.yml` deploys it to GitHub Pages whenever a release is
+published. It picks the installer for the visitor's system and shows the
+release notes. Pages has to be enabled once under Settings, Pages, with
+GitHub Actions as the source.
